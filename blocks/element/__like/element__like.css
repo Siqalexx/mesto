@@ -1,0 +1,10 @@
+.element__like {
+	margin: 0;
+	align-self: center;
+	max-width: 22px;
+	transition: opacity 1s ease;
+}
+
+.element__like:hover {
+	opacity: 0.5;
+}
