@@ -13,8 +13,5 @@
 @media screen and (max-width: 767px) {
 	.popup__job {
 		max-width: 238px;
-		font-size: 14px;
-		line-height: 17px;
-		margin: 30px auto 8px auto;
 	}
 }

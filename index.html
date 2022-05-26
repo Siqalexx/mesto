@@ -13,7 +13,6 @@
     <div class="page">
         <header class="header">
             <img src="./images/Vector.svg" alt="Логотип" class="header__logo">
-            <div class="header__line"></div>
         </header>
         <main class="content">
             <section class="profile">
@@ -21,12 +20,12 @@
                     <img src="./images/Avatar.jpg" alt="Аватар" class="profile__avatar">
                     <div class="profile__info">
                         <h1 class="profile__title">Жак-Ив Кусто</h1>
-                        <button class="button-edit">
+                        <button type="button" class="profile__button-edit">
                         </button>
                         <p class="profile__subtitle">Исследователь океана</p>
                     </div>
                 </div>
-                <button class="add-button">
+                <button type="button" class="profile__add-button">
                 </button>
 
             </section>
@@ -35,35 +34,35 @@
                     <img src="./images/kirill-pershin-1088404-unsplashg.jpg" alt="Карачаевск" class="element__image">
                     <div class="element__info">
                         <h2 class="element__title">Карачаевск</h2>
-                        <img src="./images/Group.svg" alt="Лайк" class="element__like">
+                        <button type="button" class="element__like"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img src="./images/kirill-pershin-1404681-unsplash.png" alt="Гора Эльбрус" class="element__image">
                     <div class="element__info">
                         <h2 class="element__title">Гора Эльбрус</h2>
-                        <img src="./images/Group.svg" alt="Лайк" class="element__like">
+                        <button type="button" class="element__like"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img src="./images/kirill-pershin-1556355-unsplash.png" alt="Домбай" class="element__image">
                     <div class="element__info">
                         <h2 class="element__title">Домбай</h2>
-                        <img src="./images/Group.svg" alt="Лайк" class="element__like">
+                        <button type="button" class="element__like"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img src="./images/kirill-pershin-1404681-unsplash.png" alt="Гора Эльбрус" class="element__image">
                     <div class="element__info">
                         <h2 class="element__title">Гора Эльбрус</h2>
-                        <img src="./images/Group.svg" alt="Лайк" class="element__like">
+                        <button type="button" class="element__like"></button>
                     </div>
                 </div>
                 <div class="element">
                     <img src="./images/kirill-pershin-1556355-unsplash.png" alt="Домбай" class="element__image">
                     <div class="element__info">
                         <h2 class="element__title">Домбай</h2>
-                        <img src="./images/Group.svg" alt="Лайк" class="element__like">
+                        <button type="button" class="element__like"></button>
                     </div>
                 </div>
                 <div class="element">
@@ -71,7 +70,7 @@
                         class="element__image">
                     <div class="element__info">
                         <h2 class="element__title">Карачаево-Черкессия</h2>
-                        <img src="./images/Group.svg" alt="Лайк" class="element__like">
+                        <button type="button" class="element__like"></button>
                     </div>
                 </div>
             </section>
@@ -80,15 +79,17 @@
             <h2 class="footer__copyright">© 2020 Mesto Russia</h2>
         </footer>
         <div class="popup">
-            <form class="popup__container">
-                <h2 class="popup__title">Редактировать профиль</h2>
-                <input type="text" class="popup__name" placeholder="Название вашего аккаунта">
-                <div class="popup__line"></div>
-                <input type="text" class="popup__job" placeholder="Ваш род деятельности">
-                <div class="popup__line"></div>
-                <input type="submit" class="popup__submit" value="Сохранить">
-                <button type="button" class="popup__exit"></button>
-            </form>
+            <div class="popup__container">
+                <form name="form-editing" class="popup__form">
+                    <h2 class="popup__title">Редактировать профиль</h2>
+                    <input name="input-name" type="text" class="popup__input popup__input_content_name"
+                        placeholder="Название вашего аккаунта">
+                    <input name="input-job" type="text" class="popup__input popup__input_content_job"
+                        placeholder="Ваш род деятельности">
+                    <button type="submit" class="popup__submit" value="Сохранить">Сохранить</button>
+                    <button type="button" class="popup__exit"></button>
+                </form>
+            </div>
         </div>
     </div>
     <script src="./scripts/index.js"></script>

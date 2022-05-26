@@ -1,7 +1,7 @@
-.button-edit {
+.profile__button-edit {
 	border: 1px solid white;
 	background: none;
-	background-image: url(../../images/edit.svg);
+	background-image: url(../../../images/edit.svg);
 	padding: 0;
 	margin: 15px 0 16px 18px;
 	width: 24px;
@@ -12,7 +12,7 @@
 }
 
 @media screen and (max-width: 767px) {
-	.button-edit {
+	.profile__button-edit {
 		margin: 0;
 		width: 18px;
 		height: 18px;
@@ -20,6 +20,6 @@
 	}
 }
 
-.button-edit:hover {
+.profile__button-edit:hover {
 	opacity: 0.6;
 }

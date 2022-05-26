@@ -2,19 +2,21 @@ let popup = document.querySelector(".popup");
 let formElement = document.querySelector(".popup__container");
 let nameInput = document.querySelector(".profile__title");
 let jobInput = document.querySelector(".profile__subtitle");
-let editPopup = document.querySelector(".button-edit");
+let editPopup = document.querySelector(".profile__button-edit");
 let exitPopup = formElement.querySelector(".popup__exit");
+let namePopup = formElement.querySelector(".popup__input_content_name");
+let jobPopup = formElement.querySelector(".popup__input_content_job");
 
 function formSubmitHandler(evt) {
 	evt.preventDefault();
-	nameInput.textContent = formElement.querySelector(".popup__name").value;
-	jobInput.textContent = formElement.querySelector(".popup__job").value;
+	nameInput.textContent = namePopup.value;
+	jobInput.textContent = jobPopup.value;
 	closePopup();
 }
 
 function saveName() {
-	formElement.querySelector(".popup__name").value = nameInput.textContent;
-	formElement.querySelector(".popup__job").value = jobInput.textContent;
+	namePopup.value = nameInput.textContent;
+	jobPopup.value = jobInput.textContent;
 }
 
 function openPopup() {
