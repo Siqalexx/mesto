@@ -1,6 +1,6 @@
 .profile__block {
 	display: flex;
-	max-width: calc(120px+336px);
+	max-width: calc(120px + 336px);
 }
 
 @media screen and (max-width: 767px) {
