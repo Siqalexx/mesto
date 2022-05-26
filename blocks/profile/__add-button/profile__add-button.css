@@ -9,6 +9,7 @@
 	border: 2px solid white;
 	transition: opacity 1s ease;
 	border-radius: 2px;
+	cursor: pointer;
 }
 
 @media screen and (max-width: 767px) {

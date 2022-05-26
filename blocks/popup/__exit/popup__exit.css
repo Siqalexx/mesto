@@ -9,6 +9,7 @@
 	top: -40px;
 	right: -40px;
 	transition: opacity 1s ease;
+	cursor: pointer;
 }
 
 @media screen and (max-width: 767px) {
