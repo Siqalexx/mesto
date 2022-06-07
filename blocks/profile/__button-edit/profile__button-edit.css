@@ -3,7 +3,7 @@
 	background: none;
 	background-image: url(../../../images/edit.svg);
 	padding: 0;
-	margin: 15px 0 16px 18px;
+	align-self: center;
 	width: 24px;
 	height: 24px;
 	background-repeat: no-repeat;
