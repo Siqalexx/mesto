@@ -27,8 +27,8 @@ const initialCards = [
 
 const elementTemplate = document.querySelector("#element-template").content;
 const elements = document.querySelector(".elements");
-const popupCards = document.querySelector(".popup__cards");
-const photoPopup = document.querySelector(".popup__photos");
+const popupCards = document.querySelector(".popup_cards");
+const photoPopup = document.querySelector(".popup_photos");
 const formAddedElement = document.querySelector(".popup__form_type_added");
 const addPopup = document.querySelector(".profile__add-button");
 const exitCardsPopup = formAddedElement.querySelector(".popup__exit");
