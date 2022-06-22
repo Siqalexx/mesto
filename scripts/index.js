@@ -3,22 +3,17 @@ const formEditingElement = document.querySelector(".popup__form_type_editing");
 const nameInput = document.querySelector(".profile__title");
 const jobInput = document.querySelector(".profile__subtitle");
 const editPopup = document.querySelector(".profile__button-edit");
-const exitPopup = formEditingElement.querySelector(".popup__exit");
 const namePopup = formEditingElement.querySelector(
 	".popup__input_content_name"
 );
 const jobPopup = formEditingElement.querySelector(".popup__input_content_job");
-
 const elementTemplate = document.querySelector("#element-template").content;
 const elements = document.querySelector(".elements");
 const popupCards = document.querySelector(".popup_cards");
 const photoPopup = document.querySelector(".popup_photos");
-photoPopup
-	.querySelector(".popup__exit")
-	.addEventListener("click", () => closePopup(photoPopup));
+const popups = Array.from(document.querySelectorAll(".popup"));
 const formAddedElement = document.querySelector(".popup__form_type_added");
 const addPopup = document.querySelector(".profile__add-button");
-const exitCardsPopup = formAddedElement.querySelector(".popup__exit");
 const nameCards = formAddedElement.querySelector(".popup__input_content_name");
 const imageCards = formAddedElement.querySelector(
 	".popup__input_content_image"
@@ -30,8 +25,9 @@ const inputImage = formAddedElement.querySelector(
 	".popup__input_content_image"
 );
 
-const nameElement = inputName.value;
-const imageElement = inputImage.value;
+let nameElement;
+let imageElement;
+
 const getElementByEvent = e => {
 	return e.currentTarget.closest(".element");
 };
@@ -72,9 +68,11 @@ const addCard = obj => {
 
 const handleTodoSubmit = e => {
 	e.preventDefault();
+	nameElement = inputName.value;
+	imageElement = inputImage.value;
 	elements.prepend(createElement(nameElement, imageElement));
 	closePopup(popupCards);
-	formAddedElement.reset();
+	resetForms(formAddedElement);
 };
 
 initialCards.forEach(addCard);
@@ -99,14 +97,54 @@ function fillInInputsWithData() {
 	jobPopup.value = jobInput.textContent;
 }
 
-exitPopup.addEventListener("click", () => {
-	closePopup(popupProfile);
-});
-formEditingElement.addEventListener("submit", submitEditProfileForm);
+function resetForms(popup) {
+	popup.reset();
+}
+const doButtonInactive = popup => {
+	const formButton = popup.querySelector(obj.submitButtonSelector);
+	formButton.classList.add(obj.inactiveButtonClass);
+};
+const resetInputs = formElement => {
+	const inputErrorList = Array.from(
+		formElement.querySelectorAll(".popup__input-error")
+	);
+	const inputList = Array.from(formElement.querySelectorAll(obj.inputSelector));
+	inputList.forEach(input => {
+		input.classList.remove(obj.inputErrorClass);
+	});
+	inputErrorList.forEach(inputError => {
+		inputError.textContent = "";
+		inputError.classList.remove(obj.errorClass);
+	});
+};
 editPopup.addEventListener("click", () => {
+	doButtonInactive(popupProfile);
+	resetInputs(formEditingElement);
 	openPopup(popupProfile);
 	fillInInputsWithData();
 });
-addPopup.addEventListener("click", () => openPopup(popupCards));
-exitCardsPopup.addEventListener("click", () => closePopup(popupCards));
+addPopup.addEventListener("click", () => {
+	doButtonInactive(popupCards);
+	resetInputs(formAddedElement);
+	resetForms(formAddedElement);
+	openPopup(popupCards);
+});
+
 formAddedElement.addEventListener("submit", handleTodoSubmit);
+formEditingElement.addEventListener("submit", submitEditProfileForm);
+
+popups.forEach(popup => {
+	document.addEventListener("keydown", evt => {
+		if (evt.key == "Escape" && popup.classList.contains("popup_opened")) {
+			closePopup(popup);
+		}
+	});
+	popup.addEventListener("mousedown", evt => {
+		if (
+			evt.target.classList.contains("popup") ||
+			evt.target.classList.contains("popup__exit")
+		) {
+			closePopup(evt.target.closest(".popup_opened"));
+		}
+	});
+});
