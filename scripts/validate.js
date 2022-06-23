@@ -41,8 +41,10 @@ const inputValidation = (obj, formElement) => {
 const toggleButtonState = (obj, inputList, formButton) => {
 	if (!formIsValid(inputList)) {
 		formButton.classList.add(obj.inactiveButtonClass);
+		formButton.disabled = true;
 	} else {
 		formButton.classList.remove(obj.inactiveButtonClass);
+		formButton.disabled = false;
 	}
 };
 const formIsValid = inputList => {

@@ -43,6 +43,7 @@ const removeElement = e => {
 const openPhoto = e => {
 	const element = getElementByEvent(e);
 	imagePopup.src = element.querySelector(".element__image").src;
+	imagePopup.alt = element.querySelector(".element__title").textContent;
 	imageName.textContent = element.querySelector(".element__title").textContent;
 	openPopup(photoPopup);
 };
@@ -57,6 +58,7 @@ const setCardEventListeners = element => {
 const createElement = (name, image) => {
 	const element = elementTemplate.querySelector(".element").cloneNode(true);
 	element.querySelector(".element__image").src = image;
+	element.querySelector(".element__image").alt = name;
 	element.querySelector(".element__title").textContent = name;
 	setCardEventListeners(element);
 	return element;
@@ -78,11 +80,14 @@ const handleTodoSubmit = e => {
 initialCards.forEach(addCard);
 
 function openPopup(popup) {
+	document.addEventListener("keydown", closeByEscape);
 	popup.classList.add("popup_opened");
 }
 
 function closePopup(popup) {
 	popup.classList.remove("popup_opened");
+
+	document.removeEventListener("keydown", closeByEscape);
 }
 
 function submitEditProfileForm(evt) {
@@ -103,6 +108,7 @@ function resetForms(popup) {
 const doButtonInactive = popup => {
 	const formButton = popup.querySelector(obj.submitButtonSelector);
 	formButton.classList.add(obj.inactiveButtonClass);
+	formButton.disabled = true;
 };
 const resetInputs = formElement => {
 	const inputErrorList = Array.from(
@@ -133,18 +139,20 @@ addPopup.addEventListener("click", () => {
 formAddedElement.addEventListener("submit", handleTodoSubmit);
 formEditingElement.addEventListener("submit", submitEditProfileForm);
 
+const closeByEscape = evt => {
+	if (evt.key == "Escape") {
+		const openedPopup = document.querySelector(".popup_opened");
+		closePopup(openedPopup);
+	}
+};
+
 popups.forEach(popup => {
-	document.addEventListener("keydown", evt => {
-		if (evt.key == "Escape" && popup.classList.contains("popup_opened")) {
-			closePopup(popup);
-		}
-	});
 	popup.addEventListener("mousedown", evt => {
 		if (
 			evt.target.classList.contains("popup") ||
 			evt.target.classList.contains("popup__exit")
 		) {
-			closePopup(evt.target.closest(".popup_opened"));
+			closePopup(popup);
 		}
 	});
 });
