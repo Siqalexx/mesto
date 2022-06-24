@@ -1,3 +1,7 @@
+const removePreload = () => {
+	const bodyPreload = document.querySelector(".body");
+	bodyPreload.classList.remove("preload");
+};
 const popupProfile = document.querySelector(".popup_profile");
 const formEditingElement = document.querySelector(".popup__form_type_editing");
 const nameInput = document.querySelector(".profile__title");
@@ -138,6 +142,7 @@ addPopup.addEventListener("click", () => {
 
 formAddedElement.addEventListener("submit", handleTodoSubmit);
 formEditingElement.addEventListener("submit", submitEditProfileForm);
+window.addEventListener("load", removePreload); // функция для удаления меркания transition на движке гугл после прогрузки.
 
 const closeByEscape = evt => {
 	if (evt.key == "Escape") {
