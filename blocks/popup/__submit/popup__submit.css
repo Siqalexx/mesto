@@ -1,4 +1,5 @@
 .popup__submit {
+	border: none;
 	background: #000000;
 	border-radius: 2px;
 	width: 358px;

@@ -1,15 +1,26 @@
 class Card {
-	constructor(image, title, openPhoto) {
+	constructor(image, title, openPopup) {
 		this._image = image;
 		this._title = title;
 		this._view = this._getTemplate();
-		this._openPhoto = openPhoto;
+		this._openPopup = openPopup;
 	}
 
 	_getTemplate() {
 		return document
 			.querySelector("#element-template")
-			.content.children[0].cloneNode(true);
+			.content.querySelector(".element")
+			.cloneNode(true);
+	}
+
+	_openPhoto(image, title) {
+		const PopupPhoto = document.querySelector(".popup_photos");
+		const PopupNamePhoto = PopupPhoto.querySelector(".popup__image-name");
+		const PopupLinkPhoto = PopupPhoto.querySelector(".popup__image");
+		PopupLinkPhoto.src = image;
+		PopupLinkPhoto.alt = title;
+		PopupNamePhoto.textContent = title;
+		this._openPopup(PopupPhoto);
 	}
 
 	_addEventListeners() {
@@ -24,8 +35,8 @@ class Card {
 
 		this._view
 			.querySelector(".element__image")
-			.addEventListener("click", evt => {
-				this._openPhoto(evt);
+			.addEventListener("click", () => {
+				this._openPhoto(this._image, this._title);
 			});
 	}
 
@@ -35,12 +46,14 @@ class Card {
 
 	_deleteElement() {
 		this._view.remove();
+		this._view = null;
 	}
 
 	render() {
 		const elementLink = this._view.querySelector(".element__image");
 		const elementTitle = this._view.querySelector(".element__title");
 		elementLink.src = this._image;
+		elementLink.alt = this._title;
 		elementTitle.textContent = this._title;
 
 		this._addEventListeners();
