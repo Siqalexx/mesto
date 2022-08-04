@@ -1,9 +1,9 @@
 class Card {
-	constructor(image, title, openPopup) {
+	constructor(image, title, handleCardClick) {
 		this._image = image;
 		this._title = title;
 		this._view = this._getTemplate();
-		this._openPopup = openPopup;
+		this._handleCardClick = handleCardClick;
 	}
 
 	_getTemplate() {
@@ -11,16 +11,6 @@ class Card {
 			.querySelector("#element-template")
 			.content.querySelector(".element")
 			.cloneNode(true);
-	}
-
-	_openPhoto(image, title) {
-		const PopupPhoto = document.querySelector(".popup_photos");
-		const PopupNamePhoto = PopupPhoto.querySelector(".popup__image-name");
-		const PopupLinkPhoto = PopupPhoto.querySelector(".popup__image");
-		PopupLinkPhoto.src = image;
-		PopupLinkPhoto.alt = title;
-		PopupNamePhoto.textContent = title;
-		this._openPopup(PopupPhoto);
 	}
 
 	_addEventListeners() {
@@ -36,7 +26,7 @@ class Card {
 		this._view
 			.querySelector(".element__image")
 			.addEventListener("click", () => {
-				this._openPhoto(this._image, this._title);
+				this._handleCardClick(this._image, this._title);
 			});
 	}
 
@@ -49,7 +39,7 @@ class Card {
 		this._view = null;
 	}
 
-	render() {
+	createElement() {
 		const elementLink = this._view.querySelector(".element__image");
 		const elementTitle = this._view.querySelector(".element__title");
 		elementLink.src = this._image;
