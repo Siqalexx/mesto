@@ -4,7 +4,7 @@ const MiniCSSextractPlugin = require("mini-css-extract-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
 	entry: {
-		main: "./src/scripts/index.js",
+		main: "./src/pages/index.js",
 	},
 	output: {
 		filename: "bandle.js",
@@ -17,6 +17,11 @@ module.exports = {
 	},
 	module: {
 		rules: [
+			{
+				test: /\.js$/,
+				enforce: "pre",
+				use: ["source-map-loader"],
+			},
 			{
 				test: /\.m?js$/,
 				exclude: /(node_modules|bower_components)/,

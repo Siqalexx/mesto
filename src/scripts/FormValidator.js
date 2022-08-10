@@ -54,13 +54,10 @@ class FormValidator {
 			this._hideError(inputElement);
 		}
 	};
-	_disableButton() {
-		this._formButton.classList.add(this._obj.inactiveButtonClass);
-		this._formButton.disabled = true;
-	}
+
 	_toggleButtonState = () => {
 		if (!this._formIsValid()) {
-			this._disableButton(); // !
+			this.doButtonInactive(); // !
 		} else {
 			this._formButton.classList.remove(this._obj.inactiveButtonClass);
 			this._formButton.disabled = false;
@@ -68,7 +65,8 @@ class FormValidator {
 	};
 
 	doButtonInactive = () => {
-		this._disableButton(); //не приватный метод запускает приватный.
+		this._formButton.classList.add(this._obj.inactiveButtonClass);
+		this._formButton.disabled = true;
 	};
 
 	enableValidation() {
