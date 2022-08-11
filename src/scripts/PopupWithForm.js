@@ -5,13 +5,14 @@ export default class PopupWithForm extends Popup {
 		this._handleTodoSubmit = handleTodoSubmit;
 		this._array = Array.from(this._popup.querySelectorAll(".popup__input"));
 		this._update = this._popup.children[0];
+		this._listItem = {};
 	}
 	_getInputValues() {
-		return {
-			firstInput: this._array[1].value,
-			secondInput: this._array[0].value,
-		};
-	}
+		this._array.forEach(item => {
+			this._listItem[item.name] = item.value;
+		});
+		return this._listItem;
+	} //можете пожалуйста еще сказать, как можно лучше сделать все это, чтобы не было костыльных решений, а то мне кажется, что я делаю все очень странно
 	setEventListeners() {
 		super.setEventListeners();
 

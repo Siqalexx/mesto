@@ -28,7 +28,7 @@ const sectionDrawPhoto = new Section(
 	{
 		items: initialCards,
 		renderer: item => {
-			const element = createCard(item.link, item.name, handleCardClick);
+			const element = createCard(item.name, item.link, handleCardClick);
 			elements.append(element);
 		},
 	},
@@ -60,7 +60,10 @@ function setFieldProfile(userInfo) {
 
 function handleTodoSubmit(evt, inputsList) {
 	evt.preventDefault();
-	const cardElement = createCard(inputsList.firstInput, inputsList.secondInput);
+	const cardElement = createCard(
+		inputsList["input-title"],
+		inputsList["input-image"]
+	);
 	sectionDrawPhoto.addItem(cardElement);
 	formAdded.close();
 }
@@ -68,13 +71,13 @@ function handleTodoSubmit(evt, inputsList) {
 function submitEditProfileForm(evt, inputsList) {
 	evt.preventDefault();
 	profileInfo.setUserInfo({
-		newNameEditProfile: inputsList.secondInput,
-		newJobEditProfile: inputsList.firstInput,
+		newNameEditProfile: inputsList["input-name"],
+		newJobEditProfile: inputsList["input-job"],
 	});
 	formEdit.close();
 }
 
-function createCard(link, name) {
+function createCard(name, link) {
 	const card = new Card(link, name, handleCardClick);
 	return card.createElement();
 }
