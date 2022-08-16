@@ -1,9 +1,24 @@
 class Card {
-	constructor(image, title, handleCardClick) {
+	constructor(
+		image,
+		title,
+		likes,
+		result,
+		handleCardClick,
+		handleCardDelete,
+		api
+	) {
 		this._image = image;
 		this._title = title;
+		this._likes = likes;
+		this._id = result._id;
+		this._ownerId = result.owner._id;
 		this._view = this._getTemplate();
+		this._handleCardDelete = handleCardDelete;
 		this._handleCardClick = handleCardClick;
+		this._elementLike = this._view.querySelector(".element__like");
+		this._api = api;
+		this._likeCount = this._view.querySelector(".element__number");
 	}
 
 	_getTemplate() {
@@ -17,11 +32,22 @@ class Card {
 		this._view
 			.querySelector(".element__delete")
 			.addEventListener("click", () => {
-				this._deleteElement();
+				this._handleCardDelete(this._view, this._id);
 			});
-		this._view
-			.querySelector(".element__like")
-			.addEventListener("click", this._toggleLike);
+
+		this._elementLike.addEventListener("click", () => {
+			if (this._elementLike.classList.contains("element__like_active")) {
+				this._elementLike.classList.remove("element__like_active");
+				this._api.RemoveLike(this._id).then(result => {
+					this._likeCount.textContent = result.likes.length;
+				});
+			} else {
+				this._elementLike.classList.add("element__like_active");
+				this._api.SetLike(this._id).then(result => {
+					this._likeCount.textContent = result.likes.length;
+				});
+			}
+		});
 
 		this._view
 			.querySelector(".element__image")
@@ -30,18 +56,20 @@ class Card {
 			});
 	}
 
-	_toggleLike() {
-		this.classList.toggle("element__like_active");
-	}
-
-	_deleteElement() {
-		this._view.remove();
-		this._view = null;
-	}
-
 	createElement() {
+		if (this._ownerId == "c4f7a47803fe570e1643fe00") {
+			this._view
+				.querySelector(".element__delete")
+				.classList.add("element__delete_active");
+		}
+		this._likes.forEach(item => {
+			if (item._id == "c4f7a47803fe570e1643fe00") {
+				this._elementLike.classList.add("element__like_active");
+			}
+		});
 		const elementLink = this._view.querySelector(".element__image");
 		const elementTitle = this._view.querySelector(".element__title");
+		this._likeCount.textContent = this._likes.length;
 		elementLink.src = this._image;
 		elementLink.alt = this._title;
 		elementTitle.textContent = this._title;

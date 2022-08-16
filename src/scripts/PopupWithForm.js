@@ -12,7 +12,7 @@ export default class PopupWithForm extends Popup {
 			this._listItem[item.name] = item.value;
 		});
 		return this._listItem;
-	} //можете пожалуйста еще сказать, как можно лучше сделать все это, чтобы не было костыльных решений, а то мне кажется, что я делаю все очень странно
+	}
 	setEventListeners() {
 		super.setEventListeners();
 
