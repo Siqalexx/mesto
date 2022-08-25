@@ -1,12 +1,12 @@
 import "./index.css";
-import Section from "../scripts/Section.js";
-import FormValidator from "../scripts/FormValidator.js";
-import PopupWithImage from "../scripts/PopupWithImage.js";
-import PopupWithForm from "../scripts/PopupWithForm.js";
-import UserInfo from "../scripts/UserInfo.js";
-import Card from "../scripts/Card.js";
-import Api from "../scripts/Api.js";
-import PopupWithDelete from "../scripts/PopupWithDelete.js";
+import Section from "../components/Section.js";
+import FormValidator from "../components/FormValidator.js";
+import PopupWithImage from "../components/PopupWithImage.js";
+import PopupWithForm from "../components/PopupWithForm.js";
+import UserInfo from "../components/UserInfo.js";
+import Card from "../components/Card.js";
+import Api from "../components/Api.js";
+import PopupWithDelete from "../components/PopupWithDelete.js";
 import {
 	obj,
 	elements,
@@ -22,23 +22,18 @@ import {
 	popupAvatar,
 } from "../utils/components.js";
 
-let sectionDrawPhoto;
-const api = new Api(
-	"https://mesto.nomoreparties.co/v1/cohort-47/",
-	"bbd72978-4a3a-43ab-9797-6ffde84c5828"
-);
-api.getInitialCards().then(result => {
-	sectionDrawPhoto = new Section(
-		{
-			items: result,
-			renderer: item => {
-				const element = createCard(item.name, item.link, item.likes, item);
-				elements.append(element);
-			},
-		},
-		elements
-	);
-	sectionDrawPhoto.renderItems();
+const sectionDrawPhoto = new Section({
+	renderer: item => {
+		return createCard(item.name, item.link, item.likes, item);
+	},
+	containerSelector: elements,
+});
+const api = new Api({
+	baseUrl: "https://mesto.nomoreparties.co/v1/cohort-47/",
+	headers: {
+		authorization: "bbd72978-4a3a-43ab-9797-6ffde84c5828",
+		"Content-Type": "application/json",
+	},
 });
 
 const validityPopupAddButton = new FormValidator(obj, popupCards);
@@ -65,17 +60,24 @@ const profileInfo = new UserInfo(
 	{
 		nameEditProfile: ".profile__title",
 		jobEditProfile: ".profile__subtitle",
+		avatarProfile: ".profile__avatar",
 	},
 	obj
 );
-
-api.getInfoProfile().then(result => {
-	profileAvatar.src = result.avatar;
-	profileInfo.setUserInfo({
-		newNameEditProfile: result.name,
-		newJobEditProfile: result.about,
+let myId;
+Promise.all([api.getInfoProfile(), api.getInitialCards()])
+	.then(([infoProfile, initialCards]) => {
+		profileInfo.setAvatar(infoProfile.avatar);
+		profileInfo.setUserInfo({
+			newNameEditProfile: infoProfile.name,
+			newJobEditProfile: infoProfile.about,
+		});
+		myId = infoProfile._id;
+		sectionDrawPhoto.renderItems(initialCards);
+	})
+	.catch(err => {
+		console.log(err);
 	});
-});
 
 function setFieldProfile(userInfo) {
 	nameEditInput.value = userInfo.newNameEditProfile;
@@ -84,61 +86,67 @@ function setFieldProfile(userInfo) {
 
 function handleTodoSubmit(evt, inputsList) {
 	evt.preventDefault();
+	validityPopupAddButton.doButtonInactive(popupCards);
 	formAdded.renderLoading(true, "Сохранение...");
 	api
 		.addNewCard(inputsList)
 		.then(res => {
-			if (res.ok) {
-				return res.json();
-			}
-			return Promise.reject(res.status);
+			return res.json();
 		})
 		.then(result => {
 			const cardElement = createCard(
-				inputsList["input-title"],
-				inputsList["input-image"],
+				result.name,
+				result.link,
 				result.likes,
 				result
 			);
-			sectionDrawPhoto.addItem(cardElement);
+			formAdded.close();
+			sectionDrawPhoto.prependItem(cardElement);
 		})
 		.catch(err => console.log(err))
 		.finally(formAdded.renderLoading(true, "Создать"));
-
-	formAdded.close();
 }
 
 function submitAvatarForm(evt, inputsList) {
 	evt.preventDefault();
+	validityPopupAvatar.doButtonInactive(popupAvatar);
 	formAvatar.renderLoading(true, "Сохранение...");
-	profileAvatar.src = inputsList["input-image"];
 	api
 		.setNewAvatar(inputsList["input-image"])
 		.then(res => {
 			if (res.ok) {
-				return Promise.resolve(res);
+				return Promise.resolve(res.json());
 			}
 			return Promise.reject(res.status);
 		})
-		.catch(err => console.log(err))
+		.then(result => {
+			profileInfo.setAvatar(result.avatar);
+			formAvatar.close();
+		})
+		.catch(err => {
+			console.log(err);
+		})
 		.finally(() => {
 			formAvatar.renderLoading(true, "Cохранить");
 		});
-	formAvatar.close();
 }
 
 function submitEditProfileForm(evt, inputsList) {
 	evt.preventDefault();
+	validityPopupEditButton.doButtonInactive(popupProfile);
 	formEdit.renderLoading(true, "Сохранение...");
 	api
 		.setProfileInfo(inputsList)
 		.then(res => {
+			console.log(res);
 			if (res.ok) {
 				return Promise.resolve(res);
 			}
 			return Promise.reject(res.status);
 		})
-		.catch(err => console.log(err))
+		.catch(err => {
+			console.log(err);
+		})
 		.finally(formEdit.renderLoading(true, "Создать"));
 	profileInfo.setUserInfo({
 		newNameEditProfile: inputsList["input-name"],
@@ -146,23 +154,47 @@ function submitEditProfileForm(evt, inputsList) {
 	});
 	formEdit.close();
 }
-
-function createCard(name, link, likes, id) {
-	const card = new Card(
+let card;
+function createCard(name, link, likes, resultInfo) {
+	card = new Card(
 		link,
 		name,
 		likes,
-		id,
+		resultInfo,
+		myId,
 		handleCardClick,
 		handleCardDelete,
-		api
+		handleApiRemoveLike,
+		handleApiSetLike
 	);
 	return card.createElement();
 }
+function handleApiSetLike(id, likeCount, elementLike) {
+	api.setLike(id).then(result => {
+		likeCount.textContent = result.likes.length;
+		elementLike.classList.add("element__like_active");
+	});
+}
+function handleApiRemoveLike(id, likeCount, elementLike) {
+	api.removeLike(id).then(result => {
+		likeCount.textContent = result.likes.length;
+		elementLike.classList.remove("element__like_active");
+	});
+}
 
-const popupDelete = new PopupWithDelete(".popup_delete", id => {
-	api.removeCard(id);
-});
+function handleRemoveCard(id, data) {
+	api
+		.removeCard(id)
+		.then(res => {
+			if (res.ok) {
+				popupDelete.close();
+				card.deleteElement(data);
+			}
+		})
+		.catch(err => console.log(`error: ${err}`));
+}
+
+const popupDelete = new PopupWithDelete(".popup_delete", handleRemoveCard);
 popupDelete.setEventListeners();
 
 function handleCardDelete(view, id) {

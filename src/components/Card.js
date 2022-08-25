@@ -3,21 +3,25 @@ class Card {
 		image,
 		title,
 		likes,
-		result,
+		resultInfo,
+		myId,
 		handleCardClick,
 		handleCardDelete,
-		api
+		handleApiRemoveLike,
+		handleApiSetLike
 	) {
 		this._image = image;
 		this._title = title;
 		this._likes = likes;
-		this._id = result._id;
-		this._ownerId = result.owner._id;
+		this._myId = myId;
+		this._idCard = resultInfo._id;
+		this._ownerId = resultInfo.owner._id;
 		this._view = this._getTemplate();
 		this._handleCardDelete = handleCardDelete;
 		this._handleCardClick = handleCardClick;
 		this._elementLike = this._view.querySelector(".element__like");
-		this._api = api;
+		this._handleApiRemoveLike = handleApiRemoveLike;
+		this._handleApiSetLike = handleApiSetLike;
 		this._likeCount = this._view.querySelector(".element__number");
 	}
 
@@ -32,20 +36,22 @@ class Card {
 		this._view
 			.querySelector(".element__delete")
 			.addEventListener("click", () => {
-				this._handleCardDelete(this._view, this._id);
+				this._handleCardDelete(this._view, this._idCard);
 			});
 
 		this._elementLike.addEventListener("click", () => {
 			if (this._elementLike.classList.contains("element__like_active")) {
-				this._elementLike.classList.remove("element__like_active");
-				this._api.RemoveLike(this._id).then(result => {
-					this._likeCount.textContent = result.likes.length;
-				});
+				this._handleApiRemoveLike(
+					this._idCard,
+					this._likeCount,
+					this._elementLike
+				);
 			} else {
-				this._elementLike.classList.add("element__like_active");
-				this._api.SetLike(this._id).then(result => {
-					this._likeCount.textContent = result.likes.length;
-				});
+				this._handleApiSetLike(
+					this._idCard,
+					this._likeCount,
+					this._elementLike
+				);
 			}
 		});
 
@@ -55,15 +61,18 @@ class Card {
 				this._handleCardClick(this._image, this._title);
 			});
 	}
-
+	deleteElement(data) {
+		data.remove();
+		data = null;
+	}
 	createElement() {
-		if (this._ownerId == "c4f7a47803fe570e1643fe00") {
+		if (this._ownerId == this._myId) {
 			this._view
 				.querySelector(".element__delete")
 				.classList.add("element__delete_active");
 		}
 		this._likes.forEach(item => {
-			if (item._id == "c4f7a47803fe570e1643fe00") {
+			if (item._id == this._myId) {
 				this._elementLike.classList.add("element__like_active");
 			}
 		});

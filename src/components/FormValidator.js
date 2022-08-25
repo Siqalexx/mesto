@@ -18,15 +18,8 @@ class FormValidator {
 		}
 	};
 	resetInputs = () => {
-		const inputErrorList = Array.from(
-			this._formElement.querySelectorAll(".popup__input-error")
-		);
 		this._inputList.forEach(input => {
-			input.classList.remove(this._obj.inputErrorClass);
-		});
-		inputErrorList.forEach(inputError => {
-			inputError.textContent = "";
-			inputError.classList.remove(this._obj.errorClass);
+			this._hideError(input);
 		});
 	};
 	_showError = (inputElement, errorMessage) => {

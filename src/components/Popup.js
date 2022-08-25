@@ -14,12 +14,6 @@ export default class Popup {
 		document.removeEventListener("keydown", this._handleEscClose);
 	}
 
-	renderLoading(isLoading, text) {
-		if (isLoading) {
-			this._popup.querySelector(".popup__submit").textContent = text;
-		}
-	}
-
 	_handleEscClose(evt) {
 		if (evt.key == "Escape") {
 			this.close();

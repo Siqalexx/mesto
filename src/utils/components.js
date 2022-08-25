@@ -19,6 +19,7 @@ const obj = {
 	submitButtonSelector: ".popup__submit",
 	inactiveButtonClass: "popup__button_disabled",
 	inputErrorClass: "popup__input_type_error",
+	inputErrorText: ".popup__input-error",
 	errorClass: "popup__input-error_visible",
 	formEditingElement: ".popup__form_type_editing",
 	nameEditInput: ".popup__input_content_name",
@@ -36,7 +37,6 @@ const formEditingElement = document.querySelector(obj.formEditingElement);
 const nameEditInput = formEditingElement.querySelector(obj.nameEditInput);
 const jobEditInput = formEditingElement.querySelector(obj.jobEditInput);
 const buttonDelete = document.querySelector(".element__delete");
-
 const removePreload = () => {
 	const bodyPreload = document.querySelector(".body");
 	bodyPreload.classList.remove("preload");

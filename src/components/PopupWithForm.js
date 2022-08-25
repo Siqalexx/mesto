@@ -4,7 +4,7 @@ export default class PopupWithForm extends Popup {
 		super(popupSelector);
 		this._handleTodoSubmit = handleTodoSubmit;
 		this._array = Array.from(this._popup.querySelectorAll(".popup__input"));
-		this._update = this._popup.children[0];
+		this._popupForm = this._popup.querySelector(".popup__form");
 		this._listItem = {};
 	}
 	_getInputValues() {
@@ -13,6 +13,13 @@ export default class PopupWithForm extends Popup {
 		});
 		return this._listItem;
 	}
+
+	renderLoading(isLoading, text) {
+		if (isLoading) {
+			this._popup.querySelector(".popup__submit").textContent = text;
+		}
+	}
+
 	setEventListeners() {
 		super.setEventListeners();
 
@@ -22,7 +29,7 @@ export default class PopupWithForm extends Popup {
 		});
 	}
 	close() {
-		this._update.reset();
+		this._popupForm.reset();
 		super.close();
 	}
 }
