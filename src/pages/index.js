@@ -86,13 +86,10 @@ function setFieldProfile(userInfo) {
 
 function handleTodoSubmit(evt, inputsList) {
 	evt.preventDefault();
-	validityPopupAddButton.doButtonInactive(popupCards);
+
 	formAdded.renderLoading(true, "Сохранение...");
 	api
 		.addNewCard(inputsList)
-		.then(res => {
-			return res.json();
-		})
 		.then(result => {
 			const cardElement = createCard(
 				result.name,
@@ -109,16 +106,9 @@ function handleTodoSubmit(evt, inputsList) {
 
 function submitAvatarForm(evt, inputsList) {
 	evt.preventDefault();
-	validityPopupAvatar.doButtonInactive(popupAvatar);
 	formAvatar.renderLoading(true, "Сохранение...");
 	api
 		.setNewAvatar(inputsList["input-image"])
-		.then(res => {
-			if (res.ok) {
-				return Promise.resolve(res.json());
-			}
-			return Promise.reject(res.status);
-		})
 		.then(result => {
 			profileInfo.setAvatar(result.avatar);
 			formAvatar.close();
@@ -133,26 +123,21 @@ function submitAvatarForm(evt, inputsList) {
 
 function submitEditProfileForm(evt, inputsList) {
 	evt.preventDefault();
-	validityPopupEditButton.doButtonInactive(popupProfile);
+
 	formEdit.renderLoading(true, "Сохранение...");
 	api
 		.setProfileInfo(inputsList)
 		.then(res => {
-			console.log(res);
-			if (res.ok) {
-				return Promise.resolve(res);
-			}
-			return Promise.reject(res.status);
+			profileInfo.setUserInfo({
+				newNameEditProfile: res.name,
+				newJobEditProfile: res.about,
+			});
+			formEdit.close();
 		})
 		.catch(err => {
 			console.log(err);
 		})
 		.finally(formEdit.renderLoading(true, "Создать"));
-	profileInfo.setUserInfo({
-		newNameEditProfile: inputsList["input-name"],
-		newJobEditProfile: inputsList["input-job"],
-	});
-	formEdit.close();
 }
 let card;
 function createCard(name, link, likes, resultInfo) {
@@ -169,16 +154,14 @@ function createCard(name, link, likes, resultInfo) {
 	);
 	return card.createElement();
 }
-function handleApiSetLike(id, likeCount, elementLike) {
+function handleApiSetLike(id, elementCard) {
 	api.setLike(id).then(result => {
-		likeCount.textContent = result.likes.length;
-		elementLike.classList.add("element__like_active");
+		elementCard.setLike(result);
 	});
 }
-function handleApiRemoveLike(id, likeCount, elementLike) {
+function handleApiRemoveLike(id, elementCard) {
 	api.removeLike(id).then(result => {
-		likeCount.textContent = result.likes.length;
-		elementLike.classList.remove("element__like_active");
+		elementCard.removeLike(result);
 	});
 }
 
@@ -186,10 +169,8 @@ function handleRemoveCard(id, data) {
 	api
 		.removeCard(id)
 		.then(res => {
-			if (res.ok) {
-				popupDelete.close();
-				card.deleteElement(data);
-			}
+			popupDelete.close();
+			data.deleteElement();
 		})
 		.catch(err => console.log(`error: ${err}`));
 }

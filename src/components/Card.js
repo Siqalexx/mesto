@@ -32,26 +32,27 @@ class Card {
 			.cloneNode(true);
 	}
 
+	setLike(result) {
+		this._likeCount.textContent = result.likes.length;
+		this._elementLike.classList.add("element__like_active");
+	}
+	removeLike(result) {
+		this._likeCount.textContent = result.likes.length;
+		this._elementLike.classList.remove("element__like_active");
+	}
+
 	_addEventListeners() {
 		this._view
 			.querySelector(".element__delete")
 			.addEventListener("click", () => {
-				this._handleCardDelete(this._view, this._idCard);
+				this._handleCardDelete(this, this._idCard);
 			});
 
 		this._elementLike.addEventListener("click", () => {
 			if (this._elementLike.classList.contains("element__like_active")) {
-				this._handleApiRemoveLike(
-					this._idCard,
-					this._likeCount,
-					this._elementLike
-				);
+				this._handleApiRemoveLike(this._idCard, this);
 			} else {
-				this._handleApiSetLike(
-					this._idCard,
-					this._likeCount,
-					this._elementLike
-				);
+				this._handleApiSetLike(this._idCard, this);
 			}
 		});
 
@@ -61,9 +62,9 @@ class Card {
 				this._handleCardClick(this._image, this._title);
 			});
 	}
-	deleteElement(data) {
-		data.remove();
-		data = null;
+	deleteElement() {
+		this._view.remove();
+		this._view = null;
 	}
 	createElement() {
 		if (this._ownerId == this._myId) {

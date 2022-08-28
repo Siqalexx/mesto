@@ -4,10 +4,6 @@ class Section {
 		this._containerSelector = containerSelector;
 	}
 
-	addItem(item) {
-		this._containerSelector.prepend(item);
-	}
-
 	appendItem(item) {
 		this._containerSelector.append(item);
 	}

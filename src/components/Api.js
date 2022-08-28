@@ -14,25 +14,17 @@ export default class Api {
 	getInitialCards() {
 		return fetch(`${this._baseUrl}cards`, {
 			headers: this._headers,
-		})
-			.then(res => {
-				return this._getResponseData(res);
-			})
-			.then(result => {
-				return result;
-			});
+		}).then(res => {
+			return this._getResponseData(res);
+		});
 	}
 
 	getInfoProfile() {
 		return fetch(`${this._baseUrl}users/me`, {
 			headers: this._headers,
-		})
-			.then(res => {
-				return this._getResponseData(res);
-			})
-			.then(result => {
-				return result;
-			});
+		}).then(res => {
+			return this._getResponseData(res);
+		});
 	}
 
 	setProfileInfo(inputsList) {
@@ -43,12 +35,16 @@ export default class Api {
 				name: inputsList["input-name"],
 				about: inputsList["input-job"],
 			}),
+		}).then(res => {
+			return this._getResponseData(res);
 		});
 	}
 	removeCard(id) {
 		return fetch(`${this._baseUrl}cards/${id}`, {
 			method: "Delete",
 			headers: this._headers,
+		}).then(res => {
+			return this._getResponseData(res);
 		});
 	}
 
@@ -60,31 +56,25 @@ export default class Api {
 				name: inputsList["input-title"],
 				link: inputsList["input-image"],
 			}),
+		}).then(res => {
+			return this._getResponseData(res);
 		});
 	}
 	setLike(id) {
 		return fetch(`${this._baseUrl}cards/${id}/likes`, {
 			method: "PUT",
 			headers: this._headers,
-		})
-			.then(res => {
-				return this._getResponseData(res);
-			})
-			.then(result => {
-				return result;
-			});
+		}).then(res => {
+			return this._getResponseData(res);
+		});
 	}
 	removeLike(id) {
 		return fetch(`${this._baseUrl}cards/${id}/likes`, {
 			method: "DELETE",
 			headers: this._headers,
-		})
-			.then(res => {
-				return this._getResponseData(res);
-			})
-			.then(result => {
-				return result;
-			});
+		}).then(res => {
+			return this._getResponseData(res);
+		});
 	}
 	setNewAvatar(avatar) {
 		return fetch(`${this._baseUrl}users/me/avatar`, {
@@ -93,6 +83,8 @@ export default class Api {
 			body: JSON.stringify({
 				avatar: avatar,
 			}),
+		}).then(res => {
+			return this._getResponseData(res);
 		});
 	}
 }
